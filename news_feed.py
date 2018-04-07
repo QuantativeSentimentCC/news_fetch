@@ -1,7 +1,6 @@
 import requests
 import pprint
 import feedparser
-import urllib.request
 import requests
 import dateutil.parser as dp
 from selenium import webdriver
@@ -36,7 +35,7 @@ if __name__ == '__main__':
     chrome_options.add_argument("--headless")
 
     # start up browser driver
-    driver = webdriver.Chrome(chrome_options=chrome_options)
+    driver = webdriver.Chrome("/usr/local/bin/chromedriver", chrome_options=chrome_options)
 
     # start up mongo database
     client = MongoClient('localhost', 27017)
