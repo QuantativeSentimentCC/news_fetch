@@ -2,20 +2,22 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { ServerComponent } from './server/server.component';
 import { HeaderComponent } from './header/header.component';
+import { TitleComponent } from './title/title.component';
 import { NewsComponent } from './news/news.component';
 import { NewslistComponent } from './newslist/newslist.component';
+
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ServerComponent,
     HeaderComponent,
     NewsComponent,
-    NewslistComponent
+    NewslistComponent,
+    TitleComponent
   ],
-  imports: [BrowserModule],
+  imports: [BrowserModule, HttpModule],
   providers: [],
   bootstrap: [AppComponent]
 })
