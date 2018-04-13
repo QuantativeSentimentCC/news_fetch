@@ -20,13 +20,13 @@ source
 
 def extract_content_ccn(url):
     driver.get(r['url'])
-    news_contents = driver.find_elements_by_css_selector('div.entry-content')
+    news_contents = driver.find_elements_by_css_selector('div.entry-content p')
     news = str()
     for i in range(len(news_contents)):
-        if news_contents[i].text == 'Advertisement':
-            i += 2
-        else:
-            news += news_contents[i].text
+        content = news_contents[i].text.strip()
+        if len(content) > 0:
+            #print(str(i) + ': ' + content)
+            news += (content + '\n\n')
     return news
 
 if __name__ == '__main__':

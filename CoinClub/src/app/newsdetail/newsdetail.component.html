@@ -1,0 +1,18 @@
+<br>
+<br>
+<br>
+<div class="row">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-9">
+        <h1 class="mx-auto">{{this.news.title}}</h1>
+        <p class="lead">
+          <a href="{{this.news.source}}">View Source</a>
+        </p>
+        <hr>
+        <p>Posted on {{this.newsService.timeConverter(this.news.time)}}</p>
+        <br>
+        <p class="text">{{this.news.text}}<p>
+    </div>
+  </div>
+</div>

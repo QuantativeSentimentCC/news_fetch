@@ -3,3 +3,12 @@
   margin-top: 20px;
   border-radius: 20px;
 }
+
+#published_time {
+  margin-bottom: 20px;
+  color: #555;
+}
+
+#news_text {
+  font-size: large;
+}
