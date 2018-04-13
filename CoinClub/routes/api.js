@@ -35,7 +35,6 @@ router.get('/news', (req, res) => {
       .collection('news_data')
       .find({})
       .sort({ time: -1 })
-      .limit(20)
       .toArray()
       .then(news => {
         response.data = news;
