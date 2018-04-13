@@ -20,4 +20,10 @@ export class DataService {
       .get('/api/news/' + id)
       .map(result => (this.result = result.json().data));
   }
+
+  getPrice() {
+    return this._http
+      .get('/api/price')
+      .map(result => (this.result = result.json().data));
+  }
 }

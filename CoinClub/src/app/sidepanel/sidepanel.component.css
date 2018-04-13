@@ -1,0 +1,15 @@
+.side_panel {
+  border: 1px solid #ddd;
+  padding: 40px 20px;
+  margin-top: 20px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.price_panel {
+  margin-bottom: 40px;
+}
+
+.pred_panel {
+  margin-top: 50px;
+}

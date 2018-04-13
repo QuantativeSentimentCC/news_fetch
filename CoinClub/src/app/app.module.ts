@@ -14,6 +14,7 @@ import { DataService } from './data.service';
 import { NewsService } from './news/news.service';
 import { Routes, RouterModule, Router } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { SidepanelComponent } from './sidepanel/sidepanel.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -29,7 +30,8 @@ const routes: Routes = [
     NewslistComponent,
     TitleComponent,
     NewsdetailComponent,
-    HomeComponent
+    HomeComponent,
+    SidepanelComponent
   ],
   imports: [
     BrowserModule,

@@ -35,8 +35,8 @@ router.get('/news', (req, res) => {
       .collection('news_data')
       .find({})
       .sort({ time: -1 })
-      .toArray()
       .limit(20)
+      .toArray()
       .then(news => {
         response.data = news;
         res.json(response);
@@ -56,6 +56,26 @@ router.get('/news/:news_id', (req, res) => {
       .findOne({ _id: ObjectID(req.params.news_id) })
       .then(news => {
         response.data = news;
+        res.json(response);
+      })
+      .catch(err => {
+        sendError(err, res);
+      });
+  });
+});
+
+router.get('/price', (req, res) => {
+  MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+    if (err) throw err;
+    client
+      .db('cs5412')
+      .collection('price_data')
+      .find({})
+      .sort({ timestamp: -1 })
+      .limit(1)
+      .toArray()
+      .then(news => {
+        response.data = news[0];
         res.json(response);
       })
       .catch(err => {
