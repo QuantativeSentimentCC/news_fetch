@@ -33,8 +33,9 @@ router.get('/news', (req, res) => {
     client
       .db('cs5412')
       .collection('news_data')
-      .find()
-      .limit(10)
+      .find({})
+      .sort({ time: -1 })
+      .limit(20)
       .toArray()
       .then(news => {
         response.data = news;
