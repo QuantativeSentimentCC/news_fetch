@@ -5,6 +5,9 @@ import requests
 import dateutil.parser as dp
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
 from pymongo import MongoClient
 import hashlib
 from time import sleep
@@ -36,6 +39,7 @@ if __name__ == '__main__':
 
     # start up browser driver
     driver = webdriver.Chrome("/usr/local/bin/chromedriver", chrome_options=chrome_options)
+    driver.implicitly_wait(15)
 
     # start up mongo database
     client = MongoClient('localhost', 27017)
@@ -49,6 +53,7 @@ if __name__ == '__main__':
 
     while True:
         res = requests.get(url).json()
+
         print("Updated News")
         for r in res['articles']:
             news_md5 = hashlib.md5(r['url'].encode('utf-8')).hexdigest()
