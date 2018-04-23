@@ -22,7 +22,13 @@ source
 '''
 
 def extract_content_ccn(url):
-    driver.get(r['url'])
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+    re = requests.get(url, headers=headers)
+    print(re)
+    if re is None or re.status_code != 200:
+        return None
+    content = re.content
+    driver.get("data:text/html;charset=utf-8," + str(content))
     news_contents = driver.find_elements_by_css_selector('div.entry-content p')
     news = str()
     for i in range(len(news_contents)):
@@ -67,6 +73,8 @@ if __name__ == '__main__':
             title = r['title']
             time = dp.parse(r['publishedAt']).strftime('%s')
             text = extract_content_ccn(r['url'])
+            if text is None:
+                continue
             weight = 1
             source = r['url']
 
