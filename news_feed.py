@@ -37,8 +37,10 @@ def extract_content_ccn(url):
     driver.get(url)
 
     #driver.execute_script("document.write('{}')".format(json.dumps(str(re.content, 'utf-8'))))
-
-    news_contents = driver.find_elements_by_css_selector('div.entry-content p')
+    try:
+        news_contents = driver.find_elements_by_css_selector('div.entry-content p')
+    except StaleElementReferenceException as e:
+        return None
     news = str()
     for i in range(len(news_contents)):
         news_content = str(news_contents[i].text.strip())
