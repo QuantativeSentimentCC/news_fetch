@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
+const request = require('request');
 
 /* Connect
 const connection = closure => {
@@ -81,6 +82,18 @@ router.get('/price', (req, res) => {
       .catch(err => {
         sendError(err, res);
       });
+  });
+});
+
+router.get('/headlines', (req, res) => {
+  var url =
+    'https://newsapi.org/v2/everything?q=cryptocurrency&sortBy=publishedAt&apiKey=f462ca2cbbbc445c9c9ed76819a8e458';
+
+  request.get(url, (error, resp, body) => {
+    headlines = JSON.parse(body);
+    response.data = headlines.articles.filter(obj => obj.urlToImage != null);
+    //console.log(response.data);
+    res.json(response);
   });
 });
 

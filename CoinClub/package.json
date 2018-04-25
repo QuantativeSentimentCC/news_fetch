@@ -25,6 +25,8 @@
     "core-js": "^2.4.1",
     "express": "^4.16.3",
     "mongodb": "^3.0.5",
+    "ng-simple-slideshow": "^1.1.18",
+    "request": "^2.85.0",
     "rxjs": "^5.5.6",
     "socket.io": "^2.1.0",
     "zone.js": "^0.8.19"

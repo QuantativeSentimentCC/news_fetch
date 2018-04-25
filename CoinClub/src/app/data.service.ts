@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
 
 @Injectable()
 export class DataService {
@@ -24,6 +25,12 @@ export class DataService {
   getPrice() {
     return this._http
       .get('/api/price')
+      .map(result => (this.result = result.json().data));
+  }
+
+  getHeadlines() {
+    return this._http
+      .get('/api/headlines')
       .map(result => (this.result = result.json().data));
   }
 }

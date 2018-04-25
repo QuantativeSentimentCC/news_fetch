@@ -15,6 +15,8 @@ import { NewsService } from './news/news.service';
 import { Routes, RouterModule, Router } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { SidepanelComponent } from './sidepanel/sidepanel.component';
+import { SliderComponent } from './slider/slider.component';
+import { SlideshowModule } from 'ng-simple-slideshow';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -31,14 +33,16 @@ const routes: Routes = [
     TitleComponent,
     NewsdetailComponent,
     HomeComponent,
-    SidepanelComponent
+    SidepanelComponent,
+    SliderComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(routes, { useHash: true })
+    RouterModule.forRoot(routes, { useHash: true }),
+    SlideshowModule
   ],
   providers: [DataService, NewsService],
   bootstrap: [AppComponent]
