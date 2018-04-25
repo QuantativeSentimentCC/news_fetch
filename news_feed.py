@@ -12,6 +12,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from html.parser import HTMLParser
 from pymongo import MongoClient
 import hashlib
 from time import sleep
@@ -37,7 +38,7 @@ def extract_content_ccn(url):
     driver.get(url)
 
     #driver.execute_script("document.write('{}')".format(json.dumps(str(re.content, 'utf-8'))))
-    try:
+    '''try:
         news_contents = driver.find_elements_by_css_selector('div.entry-content p')
     except StaleElementReferenceException as e:
         return None
@@ -47,7 +48,13 @@ def extract_content_ccn(url):
         if len(news_content) > 0:
             #print(str(i) + ': ' + news_content)
             news += (news_content + u'\n\n')
-    #print(news)
+    #print(news)'''
+
+    parser = HTMLParser()
+
+    parser.feed(str(re.content, 'utf-8'))
+
+    print(parser)
     return news
 
 if __name__ == '__main__':
@@ -89,12 +96,12 @@ if __name__ == '__main__':
 
                 title = r['title']
                 time = dp.parse(r['publishedAt']).strftime('%s')
-                if site[:6] == 'Google':
-                    text = r['description']
-                elif site == 'CCN':
-                    text = extract_content_ccn(r['url'])
-                if text is None:
-                    continue
+                #if site[:6] == 'Google':
+                text = r['description']
+                #elif site == 'CCN':
+                #    text = extract_content_ccn(r['url'])
+                #if text is None:
+                #    continue
                 weight = 1
                 source = r['url']
 

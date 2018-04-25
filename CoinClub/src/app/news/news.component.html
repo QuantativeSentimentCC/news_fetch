@@ -1,5 +1,5 @@
 <div id="news" class="list-group-item">
-  <a class="nav-link" [routerLink]="['detail', this.news._id]">
+  <a class="nav-link" href="{{this.news.source}}">
     <h3 class="list-group-item-heading">{{news.title}}</h3>
   </a>
   <p id="published_time">{{this.newsService.timeConverter(this.news.time)}}</p>
