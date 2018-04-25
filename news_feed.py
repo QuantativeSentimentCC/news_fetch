@@ -1,13 +1,18 @@
+#!/usr/bin/python3
+
 import requests
 import pprint
 import feedparser
 import requests
+import json
 import dateutil.parser as dp
+from seleniumrequests import Chrome
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from pymongo import MongoClient
 import hashlib
 from time import sleep
@@ -22,29 +27,37 @@ source
 '''
 
 def extract_content_ccn(url):
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'}
     re = requests.get(url, headers=headers)
-    print(re)
     if re is None or re.status_code != 200:
         return None
-    content = re.content
-    driver.get("data:text/html;charset=utf-8," + str(content))
+    #htmlstr = "data:text/html;charset=utf-8," + str(re.content, 'utf-8')
+    #driver.get(re.content)
+    #print(htmlstr)
+    #driver.get(htmlstr)
+    driver.get(url)
+
+    #driver.execute_script("document.write('{}')".format(json.dumps(str(re.content, 'utf-8'))))
+
     news_contents = driver.find_elements_by_css_selector('div.entry-content p')
     news = str()
     for i in range(len(news_contents)):
-        content = news_contents[i].text.strip()
-        if len(content) > 0:
-            #print(str(i) + ': ' + content)
-            news += (content + '\n\n')
+        news_content = str(news_contents[i].text.strip())
+        if len(news_content) > 0:
+            #print(str(i) + ': ' + news_content)
+            news += (news_content + u'\n\n')
+    #print(news)
     return news
 
 if __name__ == '__main__':
     # set up the browser driver options
     chrome_options = Options()
     chrome_options.add_argument("--headless")
+    d = DesiredCapabilities.CHROME
+    d['loggingPrefs'] = { 'performance':'ALL' }
 
     # start up browser driver
-    driver = webdriver.Chrome("/usr/local/bin/chromedriver", chrome_options=chrome_options)
+    driver = webdriver.Chrome("/usr/local/bin/chromedriver", chrome_options=chrome_options, desired_capabilities=d)
     driver.implicitly_wait(15)
 
     # start up mongo database
@@ -53,37 +66,43 @@ if __name__ == '__main__':
     db = client['cs5412']
     news_data = db['news_data']
 
-    url = ('https://newsapi.org/v2/everything?sources=crypto-coins-news&apiKey=f462ca2cbbbc445c9c9ed76819a8e458')
+    urls = {'CCN': 'https://newsapi.org/v2/everything?sources=crypto-coins-news&apiKey=f462ca2cbbbc445c9c9ed76819a8e458',
+            'Google_bitcoin': 'https://newsapi.org/v2/everything?q=bitcoin&apiKey=f462ca2cbbbc445c9c9ed76819a8e458',
+            'Google_cryptocurrency': 'https://newsapi.org/v2/everything?q=cryptocurrency&apiKey=f462ca2cbbbc445c9c9ed76819a8e458'}
 
     recent_news_md5 = deque([])
 
     while True:
-        res = requests.get(url).json()
-
         print("Updated News")
-        for r in res['articles']:
-            news_md5 = hashlib.md5(r['url'].encode('utf-8')).hexdigest()
-            if news_md5 in recent_news_md5:
-                continue
-            else:
-                if len(recent_news_md5) >= 100:
-                    recent_news_md5.popleft()
-                recent_news_md5.append(news_md5)
 
-            title = r['title']
-            time = dp.parse(r['publishedAt']).strftime('%s')
-            text = extract_content_ccn(r['url'])
-            if text is None:
-                continue
-            weight = 1
-            source = r['url']
+        for site, url in urls.items():
+            res = requests.get(url).json()
+            for r in res['articles']:
+                news_md5 = hashlib.md5(r['url'].encode('utf-8')).hexdigest()
+                if news_md5 in recent_news_md5:
+                    continue
+                else:
+                    if len(recent_news_md5) >= 100:
+                        recent_news_md5.popleft()
+                    recent_news_md5.append(news_md5)
 
-            news_updated = {'title': title,
-                        'time': time,
-                        'text': text,
-                        'weight': weight,
-                        'source': source}
-            result = news_data.insert_one(news_updated)
-            print(result)
-            print()
-        sleep(10)
+                title = r['title']
+                time = dp.parse(r['publishedAt']).strftime('%s')
+                if site[:6] == 'Google':
+                    text = r['description']
+                elif site == 'CCN':
+                    text = extract_content_ccn(r['url'])
+                if text is None:
+                    continue
+                weight = 1
+                source = r['url']
+
+                news_updated = {'title': title,
+                            'time': time,
+                            'text': text,
+                            'weight': weight,
+                            'source': source}
+                result = news_data.insert_one(news_updated)
+                print(result)
+                print()
+            sleep(10)
