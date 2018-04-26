@@ -75,8 +75,9 @@ if __name__ == '__main__':
     news_data = db['news_data']
 
     urls = {'CCN': 'https://newsapi.org/v2/everything?sources=crypto-coins-news&apiKey=f462ca2cbbbc445c9c9ed76819a8e458',
-            'Google_bitcoin': 'https://newsapi.org/v2/everything?q=bitcoin&apiKey=f462ca2cbbbc445c9c9ed76819a8e458',
-            'Google_cryptocurrency': 'https://newsapi.org/v2/everything?q=cryptocurrency&apiKey=f462ca2cbbbc445c9c9ed76819a8e458'}
+            'bitcoin': 'https://newsapi.org/v2/everything?q=bitcoin&sortBy=publishedAt&apiKey=f462ca2cbbbc445c9c9ed76819a8e458',
+            'cryptocurrency': 'https://newsapi.org/v2/everything?q=cryptocurrency&sortBy=publishedAt&apiKey=f462ca2cbbbc445c9c9ed76819a8e458',
+            'blockchain': 'https://newsapi.org/v2/everything?q=blockchain&sortBy=publishedAt&apiKey=f462ca2cbbbc445c9c9ed76819a8e458'}
 
     recent_news_md5 = deque([])
 
