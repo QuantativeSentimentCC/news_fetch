@@ -6,6 +6,7 @@ import feedparser
 import requests
 import json
 import dateutil.parser as dp
+'''
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -13,6 +14,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from html.parser import HTMLParser
+'''
 from pymongo import MongoClient
 import hashlib
 from time import sleep
@@ -59,14 +61,14 @@ def extract_content_ccn(url):
 
 if __name__ == '__main__':
     # set up the browser driver options
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    d = DesiredCapabilities.CHROME
-    d['loggingPrefs'] = { 'performance':'ALL' }
+    #chrome_options = Options()
+    #chrome_options.add_argument("--headless")
+    #d = DesiredCapabilities.CHROME
+    #d['loggingPrefs'] = { 'performance':'ALL' }
 
     # start up browser driver
-    driver = webdriver.Chrome("/usr/local/bin/chromedriver", chrome_options=chrome_options, desired_capabilities=d)
-    driver.implicitly_wait(15)
+    #driver = webdriver.Chrome("/usr/local/bin/chromedriver", chrome_options=chrome_options, desired_capabilities=d)
+    #driver.implicitly_wait(15)
 
     # start up mongo database
     client = MongoClient('localhost', 27017)
