@@ -18,5 +18,6 @@ news_data = db['news_data']
 while True:
     data, addr = sock.recvfrom(2048) # buffer size is 1024 bytes
     news_updated = json.loads(data.decode("utf-8"))
+    print("new post/n/n/n/n/n/n/n/n")
     print(news_updated)
     #result = news_data.insert_one(news_updated)
