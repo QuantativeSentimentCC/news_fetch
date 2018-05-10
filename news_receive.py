@@ -22,4 +22,4 @@ while True:
         print(news_updated)
         #result = news_data.insert_one(news_updated)
     except:
-        print "This is an error message!"
+        print("This is an error message!")
