@@ -2,7 +2,7 @@ import socket
 import json
 from pymongo import MongoClient
 
-UDP_IP = "127.0.0.1"
+UDP_IP = "128.84.124.232"
 UDP_PORT = 5005
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
