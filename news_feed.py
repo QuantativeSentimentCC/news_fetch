@@ -19,6 +19,11 @@ from pymongo import MongoClient
 import hashlib
 from time import sleep
 from collections import deque
+import socket
+
+UDP_IP = "127.0.0.1"
+UDP_PORT = 5005
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
 
 '''
 title,
@@ -113,7 +118,10 @@ if __name__ == '__main__':
                             'text': text,
                             'weight': weight,
                             'source': source}
-                result = news_data.insert_one(news_updated)
+
+                sock.sendto(json.dumps(news_updated).encode('utf-8'), (UDP_IP, UDP_PORT))
+
+                #result = news_data.insert_one(news_updated)
                 print(result)
                 print()
             sleep(10)
