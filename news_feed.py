@@ -33,33 +33,36 @@ if __name__ == '__main__':
         print("Updated News")
 
         for site, url in urls.items():
-            res = requests.get(url).json()
-            for r in res['articles']:
-                news_md5 = hashlib.md5(r['url'].encode('utf-8')).hexdigest()
-                if news_md5 in recent_news_md5:
-                    continue
-                else:
-                    if len(recent_news_md5) >= 100:
-                        recent_news_md5.popleft()
-                    recent_news_md5.append(news_md5)
+            try:
+                res = requests.get(url).json()
+                for r in res['articles']:
+                    news_md5 = hashlib.md5(r['url'].encode('utf-8')).hexdigest()
+                    if news_md5 in recent_news_md5:
+                        continue
+                    else:
+                        if len(recent_news_md5) >= 100:
+                            recent_news_md5.popleft()
+                        recent_news_md5.append(news_md5)
 
-                title = r['title']
-                time = dp.parse(r['publishedAt']).strftime('%s')
-                #if site[:6] == 'Google':
-                text = r['description']
+                    title = r['title']
+                    time = dp.parse(r['publishedAt']).strftime('%s')
+                    #if site[:6] == 'Google':
+                    text = r['description']
 
-                weight = 1
-                source = r['url']
+                    weight = 1
+                    source = r['url']
 
-                news_updated = {'title': title,
-                            'time': time,
-                            'text': text,
-                            'weight': weight,
-                            'source': source}
+                    news_updated = {'title': title,
+                                'time': time,
+                                'text': text,
+                                'weight': weight,
+                                'source': source}
 
-                sock.sendto(json.dumps(news_updated).encode('utf-8'), (UDP_IP, UDP_PORT))
+                    sock.sendto(json.dumps(news_updated).encode('utf-8'), (UDP_IP, UDP_PORT))
 
-                result = news_data.insert_one(news_updated)
-                print(result)
-                print()
+                    #result = news_data.insert_one(news_updated)
+                    print(result)
+                    print()
+            except:
+                pass
             sleep(10)
