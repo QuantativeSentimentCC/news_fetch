@@ -6,15 +6,6 @@ import feedparser
 import requests
 import json
 import dateutil.parser as dp
-'''
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from html.parser import HTMLParser
-'''
 from pymongo import MongoClient
 import hashlib
 from time import sleep
@@ -25,57 +16,7 @@ UDP_IP = "127.0.0.1"
 UDP_PORT = 5005
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
 
-'''
-title,
-time,
-text,
-weight,
-source
-'''
-
-def extract_content_ccn(url):
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'}
-    re = requests.get(url, headers=headers)
-    if re is None or re.status_code != 200:
-        return None
-    #htmlstr = "data:text/html;charset=utf-8," + str(re.content, 'utf-8')
-    #driver.get(re.content)
-    #print(htmlstr)
-    #driver.get(htmlstr)
-    driver.get(url)
-
-    #driver.execute_script("document.write('{}')".format(json.dumps(str(re.content, 'utf-8'))))
-    '''try:
-        news_contents = driver.find_elements_by_css_selector('div.entry-content p')
-    except StaleElementReferenceException as e:
-        return None
-    news = str()
-    for i in range(len(news_contents)):
-        news_content = str(news_contents[i].text.strip())
-        if len(news_content) > 0:
-            #print(str(i) + ': ' + news_content)
-            news += (news_content + u'\n\n')
-    #print(news)'''
-
-    parser = HTMLParser()
-
-    parser.feed(str(re.content, 'utf-8'))
-
-    print(parser)
-    return news
-
 if __name__ == '__main__':
-    # set up the browser driver options
-    #chrome_options = Options()
-    #chrome_options.add_argument("--headless")
-    #d = DesiredCapabilities.CHROME
-    #d['loggingPrefs'] = { 'performance':'ALL' }
-
-    # start up browser driver
-    #driver = webdriver.Chrome("/usr/local/bin/chromedriver", chrome_options=chrome_options, desired_capabilities=d)
-    #driver.implicitly_wait(15)
-
-    # start up mongo database
     client = MongoClient('localhost', 27017)
 
     db = client['cs5412']
@@ -106,10 +47,7 @@ if __name__ == '__main__':
                 time = dp.parse(r['publishedAt']).strftime('%s')
                 #if site[:6] == 'Google':
                 text = r['description']
-                #elif site == 'CCN':
-                #    text = extract_content_ccn(r['url'])
-                #if text is None:
-                #    continue
+
                 weight = 1
                 source = r['url']
 
@@ -121,7 +59,7 @@ if __name__ == '__main__':
 
                 sock.sendto(json.dumps(news_updated).encode('utf-8'), (UDP_IP, UDP_PORT))
 
-                #result = news_data.insert_one(news_updated)
+                result = news_data.insert_one(news_updated)
                 print(result)
                 print()
             sleep(10)

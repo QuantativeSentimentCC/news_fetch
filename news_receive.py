@@ -19,4 +19,4 @@ while True:
     data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
     news_updated = json.loads(data.decode("utf-8"))
     print(news_updated)
-    result = news_data.insert_one(news_updated)
+    #result = news_data.insert_one(news_updated)
