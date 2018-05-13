@@ -13,7 +13,8 @@ from collections import deque
 import socket
 
 #UDP_IP = "34.218.77.22" #data center
-UDP_IP = "35.162.126.249"
+#UDP_IP = "35.162.126.249"
+UDP_IP = "34.208.32.187";
 #UDP_IP = "127.0.0.1"
 UDP_PORT = 5005
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
@@ -32,35 +33,36 @@ if __name__ == '__main__':
     recent_news_md5 = deque([])
 
     while True:
-        print("Updated News")
+        try:
+            print("Updated News")
 
-        for site, url in urls.items():
-            res = requests.get(url).json()
-            for r in res['articles']:
-                news_md5 = hashlib.md5(r['url'].encode('utf-8')).hexdigest()
-                if news_md5 in recent_news_md5:
-                    continue
-                else:
-                    if len(recent_news_md5) >= 100:
-                        recent_news_md5.popleft()
-                    recent_news_md5.append(news_md5)
+            for site, url in urls.items():
+                res = requests.get(url).json()
+                for r in res['articles']:
+                    news_md5 = hashlib.md5(r['url'].encode('utf-8')).hexdigest()
+                    if news_md5 in recent_news_md5:
+                        continue
+                    else:
+                        if len(recent_news_md5) >= 100:
+                            recent_news_md5.popleft()
+                        recent_news_md5.append(news_md5)
 
-                title = r['title']
-                time = dp.parse(r['publishedAt']).strftime('%s')
-                text = r['description']
+                    title = r['title']
+                    time = dp.parse(r['publishedAt']).strftime('%s')
+                    text = r['description']
 
-                weight = 1
-                source = r['url']
+                    weight = 10
+                    source = r['url']
 
-                news_updated = {'title': title,
-                            'time': time,
-                            'text': text,
-                            'weight': weight,
-                            'source': source}
+                    news_updated = {'title': title,
+                                'time': time,
+                                'text': text,
+                                'weight': weight,
+                                'source': source}
 
-                #sock.sendto(json.dumps(news_updated).encode('utf-8'), (UDP_IP, UDP_PORT))
-
-                result = news_data.insert_one(news_updated)
-                #print(result)
-                print()
-            sleep(10)
+                    sock.sendto(json.dumps(news_updated).encode('utf-8'), (UDP_IP, UDP_PORT))
+                    result = news_data.insert_one(news_updated)
+                    print(result)
+        except:
+            print("some thing wrong happens");
+        sleep(10)
