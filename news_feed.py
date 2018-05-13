@@ -38,12 +38,12 @@ if __name__ == '__main__':
 
             for site, url in urls.items():
                 res = requests.get(url).json()
-                updates = list()
+                updates = []
                 for r in res['articles']:
                     news_md5 = hashlib.md5(r['url'].encode('utf-8')).hexdigest()
                     if news_md5 in recent_news_md5:
                         continue
-                    else
+                    else:
                         recent_news_md5.append(news_md5)
 
                     title = r['title']
@@ -60,9 +60,11 @@ if __name__ == '__main__':
                                 'source': source}
                     updates.append(news_updated)
 
-                sock.sendto(json.dumps(news_updated).encode('utf-8'), (UDP_IP, UDP_PORT))
-                result = news_data.insert_many(news_updated)
-                print(result)
+                    if len(updates) == 3:
+                        sock.sendto(json.dumps(updates).encode('utf-8'), (UDP_IP, UDP_PORT))
+                        result = news_data.insert_many(updates)
+                        print(result)
+                        updates.clear()
         except:
             print("some thing wrong happens");
         sleep(10)
