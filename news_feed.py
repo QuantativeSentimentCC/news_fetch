@@ -38,13 +38,12 @@ if __name__ == '__main__':
 
             for site, url in urls.items():
                 res = requests.get(url).json()
+                updates = list()
                 for r in res['articles']:
                     news_md5 = hashlib.md5(r['url'].encode('utf-8')).hexdigest()
                     if news_md5 in recent_news_md5:
                         continue
-                    else:
-                        if len(recent_news_md5) >= 100:
-                            recent_news_md5.popleft()
+                    else
                         recent_news_md5.append(news_md5)
 
                     title = r['title']
@@ -59,10 +58,11 @@ if __name__ == '__main__':
                                 'text': text,
                                 'weight': weight,
                                 'source': source}
+                    updates.append(news_updated)
 
-                    sock.sendto(json.dumps(news_updated).encode('utf-8'), (UDP_IP, UDP_PORT))
-                    result = news_data.insert_one(news_updated)
-                    print(result)
+                sock.sendto(json.dumps(news_updated).encode('utf-8'), (UDP_IP, UDP_PORT))
+                result = news_data.insert_many(news_updated)
+                print(result)
         except:
             print("some thing wrong happens");
         sleep(10)
